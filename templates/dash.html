@@ -4,13 +4,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>home</title>
+    <title>MyShop</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='sty.css')  }} ">
+
 </head>
 
 <body>
-    <h1>welcome</h1>
-    <br>
-    <a href="{{url_for('logout')}}"> logout in the account</a>
+
+    <!-- 🔝 NAVBAR -->
+    <header class="navbar">
+        <div class="logo">MyShop</div>
+
+        <input type="text" placeholder="Search for anything..." class="search">
+
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Categories</a>
+            <a href="#">Deals</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </header>
+
+    <!-- 🎯 HERO SECTION -->
+    <section class="hero">
+        <h1>Find Everything You Need</h1>
+        <p>Best deals. Best prices. Fast delivery.</p>
+        <button>Shop Now</button>
+    </section>
+
+    <!-- 🛍 PRODUCTS -->
+    <section class="products">
+        <h2>Popular Products</h2>
+
+        <div class="product-grid">
+
+            <div class="card">
+                <img src="c:\Users\LENOVO~1.14\AppData\Local\Temp\Rar$DRa11436.9940.rartemp\phone_14_01.eps">
+                <h3>Product 1</h3>
+                <p>$25</p>
+                <button>Buy Now</button>
+            </div>
+
+            <div class="card">
+                <img src="https://via.placeholder.com/200">
+                <h3>Product 2</h3>
+                <p>$40</p>
+                <button>Buy Now</button>
+            </div>
+
+            <div class="card">
+                <img src="https://via.placeholder.com/200">
+                <h3>Product 3</h3>
+                <p>$60</p>
+                <button>Buy Now</button>
+            </div>
+
+            <div class="card">
+                <img src="https://via.placeholder.com/200">
+                <h3>Product 4</h3>
+                <p>$15</p>
+                <button>Buy Now</button>
+            </div>
+
+        </div>
+    </section>
+
 </body>
 
 </html>
