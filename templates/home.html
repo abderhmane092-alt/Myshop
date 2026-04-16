@@ -4,34 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')  }} ">
+    <title>MY SHOP </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
 </head>
 
 <body>
 
-    <div class="container ">
-        <h1>Welcome to our shop 🛒</h1>
-        <p class="subtitle ">Discover amazing products and offers</p>
+    <header>
+        <h1>🛍️OUR ECOMERCE- SHOP</h1>
+        <nav>
+            HOME PAGE</a>
+            {% if session.user %}
+            <a href="/dashboard">CONTROL PANEL</a>
+            <a href="/logout">LOG OUT</a> {% else %}
+            <a href="/login">LOG IN</a>
+            <a href="/register">REGISTER AN ACOUNT</a> {% endif %}
+        </nav>
+    </header>
 
-        <a href="{{ url_for( 'login') }} " class="login ">Login</a>
-        <br>
-        <a href="{{ url_for( 'register') }} " class="register ">Register</a>
-
-    </div>
     <!-- admin تحكم بمنتجات من خلال  -->
-    {% for product in products %}
-    <div class="card">
-        <img src="{{url_for('static', filename='image/' + product.image)}}">
-        <h3>{{ product.name }}</h3>
-        <p>{{ product.description }}</p>
-        <p>${{ product.price }}</p>
-        <button>Buy Now</button>
+    <div class="منتجات">
+        {% for product in products %}
+        <div class="card">
+            <img src="{{url_for('static', filename='image/' + product.image)}}">
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            <p>${{ product.price }}</p>
+            <button>Buy Now</button>
+        </div>
+        {% else %}
+        <p>لا توجد منتجات</p>
+        {% endfor %}
     </div>
-    {% else %}
-    <p>لا توجد منتجات</p>
-    {% endfor %}
 
 </body>
 

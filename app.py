@@ -106,13 +106,12 @@ if __name__=="__main__":
     db.create_all()
     if not User.query.filter_by(username="admin").first():
             hashed = bcrypt.generate_password_hash("admin123").decode('utf-8')
-            admin_user = User(
-                first_name="Admin",
-                last_name="Admin",
-                age=21,
-                username="admin",
-                email="admin@gmail.com",
-                password=hashed
+            admin_user = User(first_name="Admin",
+            last_name="Admin",
+            age=21,
+            username="admin",
+            email="admin@gmail.com",
+            password=hashed
             )
             db.session.add(admin_user)
             db.session.commit()
