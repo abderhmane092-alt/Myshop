@@ -1,10 +1,12 @@
 from flask import Flask ,render_template,redirect,url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_user, login_required, LoginManager,logout_user
+from flask_login import UserMixin, login_user, login_required, LoginManager,logout_user,current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField,EmailField,IntegerField
 from wtforms.validators import InputRequired,Length,ValidationError
 from flask_bcrypt import Bcrypt
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 app =Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY']='keykey'
@@ -14,7 +16,6 @@ bcrypt=Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -26,6 +27,12 @@ class User(db.Model,UserMixin):
     username=db.Column(db.String(35),nullable=False,unique=True) #يمنع استخدم نفس الاسم او ايميل
     email=db.Column(db.String(35),nullable=False,unique=True)
     password=db.Column(db.String(128),nullable=False)
+class Product(db.Model):
+    id=db.Column(db.Integer,primary_key=True) # خاص به يمنع تكرر idكل منتج عنده 
+    image =db.Column(db.String(100))
+    name=db.Column(db.String(100),nullable=False)#يمنع ان يكون فارغ
+    price=db.Column(db.Float,nullable=False)
+    descripition=db.Column(db.String(250))
 class RegisterForm(FlaskForm):
     first_name = StringField(validators=[InputRequired(),Length(min=3,max=25)],render_kw={"placeholder":"first_name"})
     last_name = StringField(validators=[InputRequired(),Length(min=3,max=25)],render_kw={"placeholder":"last_name"})
@@ -39,12 +46,13 @@ class RegisterForm(FlaskForm):
         if existing_user:
             raise ValidationError("change username in other name")
 class LoginForm(FlaskForm): 
-    username=StringField(validators=[InputRequired(),Length(min=6,max=25)],render_kw={"placeholder":"username"})
+    username=StringField(validators=[InputRequired(),Length(min=3,max=25)],render_kw={"placeholder":"username"})
     password=PasswordField(validators=[InputRequired(),Length(min=6,max=20)], render_kw={"placeholder": "password"})
     submit=SubmitField("login")
 @app.route("/") 
 def home():
-    return render_template('home.html')
+    products = Product.query.all()
+    return render_template('home.html', products=products)
 @app.route('/login',methods=['GET','POST'])
 def login(): 
      form=LoginForm()
@@ -60,13 +68,13 @@ def login():
 @app.route('/dash',methods=['GET','POST'])
 @login_required  
 def dash():
-    return render_template('dash.html') #دخول الى الصفحة
+    products = Product.query.all()
+    return render_template('dash.html', products=products) #دخول الى الصفحة
 @app.route('/logout',methods=['get','post'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
-
 @app.route('/register',methods=['GET','POST'])
 def register():
     form = RegisterForm()
@@ -78,8 +86,35 @@ def register():
      login_user(new_user)
      return redirect(url_for('dash'))
     return render_template('register.html',form=form)
+@app.route('/product/<int:product_id>')     
+def product_detail(product_id):
+    product=Product.query.get(product_id) 
+    return render_template('product.html',product=product)
+class AdminModelView(ModelView):
+    def is_accessible(self): 
+        return current_user.is_authenticated and current_user.username == "admin" 
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('login'))
+admin=Admin(app)
+admin.add_view(AdminModelView(Product,db.session))  
+admin.add_view(AdminModelView(User,db.session))  
 @app.route("/about")
 def about():
     return render_template("about.html")
 if __name__=="__main__":
-    app.run(debug=True)
+ with app.app_context():
+    db.create_all()
+    if not User.query.filter_by(username="admin").first():
+            hashed = bcrypt.generate_password_hash("admin123").decode('utf-8')
+            admin_user = User(
+                first_name="Admin",
+                last_name="Admin",
+                age=21,
+                username="admin",
+                email="admin@gmail.com",
+                password=hashed
+            )
+            db.session.add(admin_user)
+            db.session.commit()
+            print("✅ Admin created: username=admin, password=admin123")
+app.run(debug=True)

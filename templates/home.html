@@ -18,7 +18,20 @@
         <a href="{{ url_for( 'login') }} " class="login ">Login</a>
         <br>
         <a href="{{ url_for( 'register') }} " class="register ">Register</a>
+
     </div>
+    <!-- admin تحكم بمنتجات من خلال  -->
+    {% for product in products %}
+    <div class="card">
+        <img src="{{url_for('static', filename='image/' + product.image)}}">
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <p>${{ product.price }}</p>
+        <button>Buy Now</button>
+    </div>
+    {% else %}
+    <p>لا توجد منتجات</p>
+    {% endfor %}
 
 </body>
 
