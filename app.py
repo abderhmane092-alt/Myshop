@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, login_required, LoginManager,logout_user,current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField,EmailField,IntegerField
-from wtforms.validators import InputRequired,Length,ValidationError
+from wtforms.validators import InputRequired,Length,ValidationError ,NumberRange
 from flask_bcrypt import Bcrypt
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -23,7 +23,7 @@ class User(db.Model,UserMixin):
     id=db.Column(db.Integer,primary_key=True)
     first_name=db.Column(db.String(35),nullable=False)
     last_name=db.Column(db.String(35),nullable=False)
-    age=db.Column(db.String(3),nullable=False)
+    age =db.Column(db.Integer, nullable=False)
     username=db.Column(db.String(35),nullable=False,unique=True) #يمنع استخدم نفس الاسم او ايميل
     email=db.Column(db.String(35),nullable=False,unique=True)
     password=db.Column(db.String(128),nullable=False)
@@ -36,7 +36,7 @@ class Product(db.Model):
 class RegisterForm(FlaskForm):
     first_name = StringField(validators=[InputRequired(),Length(min=3,max=25)],render_kw={"placeholder":"first_name"})
     last_name = StringField(validators=[InputRequired(),Length(min=3,max=25)],render_kw={"placeholder":"last_name"})
-    age =IntegerField(validators=[InputRequired(),Length(min=1,max=3)],render_kw={"placeholder":"age"})
+    age = IntegerField(validators=[InputRequired(), NumberRange(min=1, max=120)], render_kw={"placeholder": "age"})
     username= StringField(validators=[InputRequired(),Length(min=3,max=25)],render_kw={"placeholder":"username"})
     email=EmailField(validators=[InputRequired(),Length(min=5,max=25)],render_kw={"placeholder":"email"})
     password=PasswordField(validators=[InputRequired(),Length(min=6,max=20)], render_kw={"placeholder": "password"})
@@ -58,8 +58,7 @@ def login():
      form=LoginForm()
      if form.validate_on_submit():
         user= User.query.filter_by(username=form.username.data).first() #تحقق اذا كان يوجد الاسم في التخزين
-        if user: 
-         if user and bcrypt.check_password_hash(user.password, form.password.data):#اذ كان كلمة سر صحيحة يسجل
+        if user and bcrypt.check_password_hash(user.password, form.password.data):#اذ كان كلمة سر صحيحة يسجل
             login_user(user)
             return redirect(url_for('dash'))
         else:
