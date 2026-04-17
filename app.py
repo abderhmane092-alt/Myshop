@@ -1,4 +1,4 @@
-from flask import Flask ,render_template,redirect,url_for,session,redirect
+from flask import Flask ,render_template,redirect,url_for,session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, login_required, LoginManager,logout_user,current_user
 from flask_wtf import FlaskForm
@@ -69,7 +69,7 @@ def login():
 def dash():
     products = Product.query.all()
     return render_template('dash.html', products=products) #دخول الى الصفحة
-@app.route('/logout',methods=['get','post'])
+@app.route('/logout',methods=['GETt','POST'])
 @login_required
 def logout():
     logout_user()
@@ -100,7 +100,64 @@ admin.add_view(AdminModelView(User,db.session))
 @app.route("/about")
 def about():
     return render_template("about.html")
+
+#السلة
+@app.route('/add_to_cart/<int:product_id>')
+def add_to_cart(product_id):
+    if 'cart' not in session:#sesion its  cookies or هو ذاكرة مخزنة لكل شخص
+        session['cart'] = {}
+    cart = session['cart']
+    if str(product_id) in cart:
+        cart[str(product_id)] += 1
+    else:
+        cart[str(product_id)] = 1
+    session['cart'] = cart
+    return redirect(url_for('dash'))
+@app.route('/cart')#صناعة السلة
+def cart():
+    cart = session.get('cart', {})
+    products = []
+    total = 0
+
+    for product_id, quantity in cart.items():
+        product = db.session.get(Product, int(product_id))
+        if product:
+            subtotal = product.price * quantity
+            total += subtotal
+            products.append({'product': product,'quantity': quantity,'subtotal': subtotal})
+    return render_template('cart.html', products=products, total=total)
+@app.route('/remove_from_cart/<int:product_id>') #حذف داخل السلة
+def remove_from_cart(product_id):
+    cart = session.get('cart', {})
+    if str(product_id) in cart:
+        cart.pop(str(product_id))
+    session['cart'] = cart
+    return redirect(url_for('cart'))
+@app.route('/clear_cart')
+def clear_cart():
+    session.pop('cart', None)
+    return redirect(url_for('cart'))
+@app.route('/checkout')
+#تاكيد الطلب
+@login_required
+def checkout():
+    cart = session.get('cart', {})
+    total = 0
+    items = []
+    for product_id, quantity in cart.items():
+        product = db.session.get(Product, int(product_id))
+        if product:
+            subtotal = product.price * quantity
+            total += subtotal
+        items.append({'product': product,'quantity': quantity,'subtotal': subtotal })
+    return render_template('checkout.html', items=items, total=total)
+@app.route('/confirm_order', methods=['POST'])
+ # اتمام الطلب وتفريغ السلة
+@login_required
+def confirm_order():
+    session.pop('cart', None) 
+    return render_template('success.html')
 if __name__=="__main__":
  with app.app_context():
     db.create_all()
-app.run(debug=True)
+ app.run(debug=True)

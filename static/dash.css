@@ -1,0 +1,154 @@
+/* RESET */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* BODY */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    color: white;
+}
+
+
+/* NAVBAR */
+
+.navbar {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar h1 {
+    font-family: "Story Script", sans-serif;
+    font-size: 28px;
+}
+
+
+/* SEARCH BAR */
+
+.search {
+    padding: 12px 20px;
+    width: 300px;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.search::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+
+/* NAV LINKS */
+
+.nav-links a {
+    color: white;
+    margin-left: 1rem;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    background: #3b82f6;
+}
+
+
+/* HERO */
+
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.hero h1 {
+    font-size: 48px;
+}
+
+.hero p {
+    color: #ccc;
+    margin: 15px 0;
+}
+
+.hero button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+}
+
+.hero button:hover {
+    background: #2563eb;
+}
+
+
+/* PRODUCTS GRID */
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 40px;
+}
+
+
+/* CARD */
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.card h3 {
+    margin: 10px 0;
+}
+
+.price {
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+
+/* BUTTON */
+
+.card button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+}
+
+.card button:hover {
+    background: #2563eb;
+}

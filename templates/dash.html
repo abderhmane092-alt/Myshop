@@ -1,49 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyShop</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='sty.css')  }} ">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Story+Script&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='dash.css') }}">
 </head>
 
 <body>
 
     <!-- 🔝 NAVBAR -->
     <header class="navbar">
-        <div class="logo">MyShop</div>
+        <h1>MYshop.DZ</h1>
 
-        <input type="text" placeholder="Search for anything..." class="search">
+        <input type="text" placeholder="Search for phones, PCs..." class="search">
 
         <div class="nav-links">
-            <a href="#">Home</a>
-            <a href="#">Categories</a>
-            <a href="#">Deals</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="#">HOME</a>
+            <a href="{{ url_for('cart') }}">🛒 Cart</a>
+            <a href="#">PHONES</a>
+            <a href="#">PCS</a>
+            <a href="#">DEALS</a>
+            <a href="{{ url_for('logout') }}">LOGOUT</a>
         </div>
     </header>
 
-    <!-- 🎯 HERO SECTION -->
+    <!-- 🎯 HERO -->
     <section class="hero">
-        <h1>Find Everything You Need</h1>
-        <p>Best deals. Best prices. Fast delivery.</p>
+        <h1>Latest Tech, Best Prices</h1>
+        <p>Discover top smartphones and powerful computers</p>
         <button>Shop Now</button>
     </section>
-    <!-- admin تحكم بمنتجات من خلال  -->
-    <div class="منتجات">
+
+    <!-- 🛒 PRODUCTS -->
+    <div class="products">
         {% for product in products %}
         <div class="card">
-            <img src="{{url_for('static', filename='image/' + product.image)}}">
+            <img src="{{ url_for('static', filename='image/' + product.image) }}">
             <h3>{{ product.name }}</h3>
             <p>{{ product.description }}</p>
-            <p>${{ product.price }}</p>
+            <p class="price">${{ product.price }}</p>
             <button>Buy Now</button>
         </div>
         {% else %}
-        <p>لا توجد منتجات</p>
+        <p style="color:white;">No products available</p>
         {% endfor %}
     </div>
 
