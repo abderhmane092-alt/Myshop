@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cart</title>
-
+    <link href="https://fonts.googleapis.com/css2?family=Story+Script&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='cart.css') }}">
 </head>
 
@@ -12,8 +12,9 @@
 
     <!-- NAVBAR -->
     <header class="navbar">
-        <h1>Myshop.Dz</h1>
-
+        <a href="{{ url_for('dash') }}" class="logo-link">
+            <h1>My<span class="shop">Shop</span>.Dz</h1>
+        </a>
         <nav>
             <a href="{{ url_for('dash') }}">SHOP</a>
             <a href="{{ url_for('checkout') }}">CHECKOUT</a>
@@ -25,25 +26,23 @@
 
     <!-- CART CONTENT -->
     <div class="cart-container">
-
         {% for item in products %}
         <div class="cart-card">
 
             {% if item.product.image %}
-            <img class="product-img" src="{{ url_for('static', filename='image/' + item.product.image) }}"> {% endif %}
+            <img class="product-img" src="{{ url_for('static', filename='image/' + item.product.image) }}">
+            {% endif %}
 
             <div class="info">
                 <h3>{{ item.product.name }}</h3>
                 <p class="price">Price: ${{ item.product.price }}</p>
+
                 <div class="qty-box">
-
                     <a class="qty-btn" href="{{ url_for('update_cart', product_id=item.product.id, action='decrease') }}">-</a>
-
                     <span class="qty">{{ item.quantity }}</span>
-
                     <a class="qty-btn" href="{{ url_for('update_cart', product_id=item.product.id, action='increase') }}">+</a>
-
                 </div>
+
                 <p class="subtotal">Subtotal: ${{ item.subtotal }}</p>
             </div>
 
@@ -57,7 +56,6 @@
         {% else %}
         <p class="empty">Your cart is empty 😢</p>
         {% endfor %}
-
     </div>
 
     <!-- TOTAL -->
