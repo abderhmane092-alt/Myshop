@@ -8,7 +8,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #0f1115;
+    background: #fefeff;
     color: white;
 }
 
@@ -20,7 +20,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 18px 40px;
-    background: #111827;
+    background: #c9cbce;
     border-bottom: 1px solid #222;
     position: sticky;
     top: 0;
@@ -61,7 +61,7 @@ nav a:hover {
     padding: 40px 20px 10px;
 }
 
-.shop-header h2 {
+.shop-header h1 {
     font-size: 28px;
 }
 
