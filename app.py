@@ -114,6 +114,7 @@ def add_to_cart(product_id):
     session['cart'] = cart
     return redirect(url_for('dash'))
 @app.route('/cart')#صناعة السلة
+@login_required
 def cart():
     cart = session.get('cart', {})
     products = []
@@ -126,6 +127,24 @@ def cart():
             total += subtotal
             products.append({'product': product,'quantity': quantity,'subtotal': subtotal})
     return render_template('cart.html', products=products, total=total)
+@app.route('/update_cart/<int:product_id>/<action>')
+@login_required
+def update_cart(product_id, action):
+    cart = session.get('cart', {})
+    pid = str(product_id)
+    if pid not in cart:
+        cart[pid] = 0
+    if action == "increase":
+        cart[pid] += 1
+    elif action == "decrease":
+        cart[pid] -= 1
+        if cart[pid] <= 0:
+            del cart[pid]
+
+    session['cart'] = cart
+    session.modified = True
+
+    return redirect(url_for('cart'))
 @app.route('/remove_from_cart/<int:product_id>') #حذف داخل السلة
 def remove_from_cart(product_id):
     cart = session.get('cart', {})
