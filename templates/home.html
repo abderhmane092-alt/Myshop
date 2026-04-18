@@ -4,41 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MY SHOP </title>
+    <title>MyShop DZ</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sekuya&family=Story+Script&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='sty.css') }}">
 </head>
 
 <body>
 
+    <!-- HEADER -->
     <header>
-        <h1> MYshop.DZ </h1>
+        <h1>MYshop.DZ</h1>
+
         <nav>
             HOME PAGE</a>
-            {% if session.user %}
+            {% if current_user.is_authenticated %}
             <a href="/dashboard">CONTROL PANEL</a>
-            <a href="/logout">LOG OUT</a> {% else %}
             <a href="/login">LOG IN</a>
             <a href="/register">REGISTER AN ACOUNT</a> {% endif %}
         </nav>
     </header>
 
-    <!-- admin تحكم بمنتجات من خلال  -->
-    <div class="منتجات">
+    <!-- SHOP TITLE -->
+    <section class="shop-header">
+        <h2>All Products Here</h2>
+        <p>Find the best deals and latest products</p>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="products">
+
         {% for product in products %}
         <div class="card">
-            <img src="{{url_for('static', filename='image/' + product.image)}}">
+
+            <img src="{{ url_for('static', filename='image/' + product.image) }}">
+
             <h3>{{ product.name }}</h3>
+
             <p>{{ product.description }}</p>
-            <p>${{ product.price }}</p>
-            <button>Buy Now</button>
+
+            <p class="price">${{ product.price }}</p>
+
+            <button>🛒 Add to Cart</button>
+
         </div>
-        {% else %}
-        <p>لا توجد منتجات</p>
         {% endfor %}
-    </div>
+
+    </section>
 
 </body>
 
