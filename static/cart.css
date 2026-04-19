@@ -137,7 +137,7 @@ nav a:hover {
 
 .empty {
     text-align: center;
-    color: #94a3b8;
+    color: #ffffff;
 }
 
 
@@ -172,14 +172,6 @@ nav a:hover {
 .checkout-btn:hover {
     background: #0ea5e9;
 }
-
-.continue-btn {
-    display: inline-block;
-    margin-left: 10px;
-    color: #38bdf8;
-    text-decoration: none;
-}
-
 
 /* QUANTITY CONTAINER */
 
